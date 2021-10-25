@@ -74,8 +74,11 @@ contract SupplyChain {
     uint _price = items[_sku].price;
     uint amountToRefund = msg.value - _price;
    // items[_sku].buyer.transfer(amountToRefund);
-    (bool sent, bytes memory data) = items[_sku].buyer.call{value: amountToRefund}("");
-    require(sent);
+   if(amountToRefund > 0) {
+     (bool refund, ) = items[_sku].buyer.call{value: amountToRefund}("");
+     require(refund);
+   }
+
   }
 
   // For each of the following modifiers, use what you learned about modifiers
@@ -107,20 +110,20 @@ contract SupplyChain {
     _;
   }
 
-  constructor() {
+  constructor() public{
     // 1. Set the owner to the transaction sender
     owner = msg.sender;
-    // 2. Initialize the sku count to 0. Question, is this necessary?
+    // 2. Initialize the sku count to 0. Question, is this necessary? The default value for the uint or int types is 0.
+    // just in case...
     skuCount = 0;
   }
 
-  receive() external payable {
-    revert();
-  }
+//
 
   function addItem(string memory _name, uint _price) public returns (bool) {
+
     // 1. Create a new item and put in array
-     items[skuCount] = Item({
+     items[skuCount] =  Item({
       name: _name,
       sku: skuCount,
       price: _price,
@@ -134,19 +137,7 @@ contract SupplyChain {
     emit LogForSale(skuCount);
     // 4. return true
     return true;
-    // hint:
-    // items[skuCount] = Item({
-    //  name: _name, 
-    //  sku: skuCount, 
-    //  price: _price, 
-    //  state: State.ForSale, 
-    //  seller: msg.sender, 
-    //  buyer: address(0)
-    //});
-    //
-    //skuCount = skuCount + 1;
-    // emit LogForSale(skuCount);
-    // return true;
+
   }
 
   // Implement this buyItem function. 
@@ -160,7 +151,17 @@ contract SupplyChain {
   //    - check the value after the function is called to make 
   //      sure the buyer is refunded any excess ether sent. 
   // 6. call the event associated with this function!
-  function buyItem(uint sku) public {}
+  function buyItem(uint sku) public forSale(sku) paidEnough(items[sku].price) checkValue(sku) payable returns (bool){
+    //getting the item
+    Item storage i = items[sku];
+    i.buyer = payable(msg.sender);
+    i.state = State.Sold;
+    (bool sent, ) = i.seller.call{value: i.price}("");
+    require(sent);
+
+    emit LogSold(sku);
+    return sent;
+  }
 
   // 1. Add modifiers to check:
   //    - the item is sold already 
@@ -177,15 +178,15 @@ contract SupplyChain {
   function receiveItem(uint sku) public {}
 
   // Uncomment the following code block. it is needed to run tests
-  /* function fetchItem(uint _sku) public view */ 
-  /*   returns (string memory name, uint sku, uint price, uint state, address seller, address buyer) */ 
-  /* { */
-  /*   name = items[_sku].name; */
-  /*   sku = items[_sku].sku; */
-  /*   price = items[_sku].price; */
-  /*   state = uint(items[_sku].state); */
-  /*   seller = items[_sku].seller; */
-  /*   buyer = items[_sku].buyer; */
-  /*   return (name, sku, price, state, seller, buyer); */
-  /* } */
+   function fetchItem(uint _sku) public view
+     returns (string memory name, uint sku, uint price, uint state, address seller, address buyer)
+   {
+     name = items[_sku].name;
+     sku = items[_sku].sku;
+     price = items[_sku].price;
+     state = uint(items[_sku].state);
+     seller = items[_sku].seller;
+     buyer = items[_sku].buyer;
+     return (name, sku, price, state, seller, buyer);
+   }
 }
