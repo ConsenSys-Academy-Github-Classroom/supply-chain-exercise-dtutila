@@ -9,7 +9,7 @@ module.exports = {
   // To run contract with the latest compiler, uncomment lines 10-14 below:
   compilers: {
     solc: {
-      version: "0.8.3",    // Fetch latest 0.8.x Solidity compiler
+      version: "0.8.9",    // Fetch latest 0.8.x Solidity compiler
     }
   }
 };
