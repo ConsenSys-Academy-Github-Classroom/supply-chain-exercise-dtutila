@@ -16,7 +16,7 @@ const items = (ca) => {
       name: t.name,
       nodeType: t.nodeType,
       stateVariable: t.stateVariable,
-      type: t.typeName.name || t.typeName.pathNode.name, //needed to run with solc 0.8.0+
+      type: t.typeName.name || t.typeName.pathNode.name, //needed to run with solc 0.8.0+ and get the correct type name for the State struct.
       mutability: t.typeName.stateMutability,
     }));
 };
