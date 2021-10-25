@@ -73,9 +73,9 @@ contract SupplyChain {
     _;
     uint _price = items[_sku].price;
     uint amountToRefund = msg.value - _price;
-    items[_sku].buyer.transfer(amountToRefund);
-    //(bool sent, bytes memory data) = items[_sku].buyer.call{value: amountToRefund}("");
-    //require(sent);
+   // items[_sku].buyer.transfer(amountToRefund);
+    (bool sent, bytes memory data) = items[_sku].buyer.call{value: amountToRefund}("");
+    require(sent);
   }
 
   // For each of the following modifiers, use what you learned about modifiers
@@ -107,27 +107,27 @@ contract SupplyChain {
     _;
   }
 
-//  constructor() {
-//    // 1. Set the owner to the transaction sender
-//    owner = msg.sender;
-//    // 2. Initialize the sku count to 0. Question, is this necessary?
-//    skuCount = 0;
-//  }
+  constructor() {
+    // 1. Set the owner to the transaction sender
+    owner = msg.sender;
+    // 2. Initialize the sku count to 0. Question, is this necessary?
+    skuCount = 0;
+  }
 
-//  receive() external payable {
-//    revert();
-//  }
+  receive() external payable {
+    revert();
+  }
 
   function addItem(string memory _name, uint _price) public returns (bool) {
     // 1. Create a new item and put in array
-/*     items[skuCount] = Item({
+     items[skuCount] = Item({
       name: _name,
       sku: skuCount,
       price: _price,
       state: State.ForSale,
       seller: payable(msg.sender),
       buyer: payable(address(0))
-    });*/
+    });
     // 2. Increment the skuCount by one
     skuCount = skuCount + 1;
     // 3. Emit the appropriate event
