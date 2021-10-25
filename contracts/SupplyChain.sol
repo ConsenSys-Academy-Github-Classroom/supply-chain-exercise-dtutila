@@ -104,13 +104,9 @@ contract SupplyChain {
     require(items[_sku].state == State.Shipped);
     _;
   }
-  // modifier received(uint _sku) 
-  modifier received(uint _sku) {
-    require(items[_sku].state == State.Received);
-    _;
-  }
 
-  constructor() public{
+
+  constructor() {
     // 1. Set the owner to the transaction sender
     owner = msg.sender;
     // 2. Initialize the sku count to 0. Question, is this necessary? The default value for the uint or int types is 0.
@@ -168,14 +164,25 @@ contract SupplyChain {
   //    - the person calling this function is the seller. 
   // 2. Change the state of the item to shipped. 
   // 3. call the event associated with this function!
-  function shipItem(uint sku) public {}
+  function shipItem(uint sku) public sold(sku) verifyCaller(items[sku].seller) returns(bool) {
+    Item storage i = items[sku];
+    i.state = State.Shipped;
+    emit LogShipped(sku);
+    return true;
+  }
 
   // 1. Add modifiers to check 
   //    - the item is shipped already 
   //    - the person calling this function is the buyer. 
   // 2. Change the state of the item to received. 
   // 3. Call the event associated with this function!
-  function receiveItem(uint sku) public {}
+  function receiveItem(uint sku) public shipped(sku) verifyCaller(items[sku].buyer) returns(bool){
+    Item storage i = items[sku];
+    i.state = State.Received;
+    emit LogReceived(sku);
+    return true;
+
+  }
 
   // Uncomment the following code block. it is needed to run tests
    function fetchItem(uint _sku) public view
