@@ -31,36 +31,36 @@ contract("SupplyChain", function (accounts) {
       before(() => {
         enumState = SupplyChain.enums.State;
         assert(
-            enumState,
-            "The contract should define an Enum called State"
+          enumState,
+          "The contract should define an Enum called State"
         );
       });
 
       it("should define `ForSale`", () => {
         assert(
-            enumState.hasOwnProperty('ForSale'),
-            "The enum does not have a `ForSale` value"
+          enumState.hasOwnProperty('ForSale'),
+          "The enum does not have a `ForSale` value"
         );
       });
 
       it("should define `Sold`", () => {
         assert(
-            enumState.hasOwnProperty('Sold'),
-            "The enum does not have a `Sold` value"
+          enumState.hasOwnProperty('Sold'),
+          "The enum does not have a `Sold` value"
         );
       });
 
       it("should define `Shipped`", () => {
         assert(
-            enumState.hasOwnProperty('Shipped'),
-            "The enum does not have a `Shipped` value"
+          enumState.hasOwnProperty('Shipped'),
+          "The enum does not have a `Shipped` value"
         );
       });
 
       it("should define `Received`", () => {
         assert(
-            enumState.hasOwnProperty('Received'),
-            "The enum does not have a `Received` value"
+          enumState.hasOwnProperty('Received'),
+          "The enum does not have a `Received` value"
         );
       });
     })
@@ -71,82 +71,82 @@ contract("SupplyChain", function (accounts) {
       before(() => {
         subjectStruct = ItemStruct(SupplyChain);
         assert(
-            subjectStruct !== null,
-            "The contract should define an `Item Struct`"
+          subjectStruct !== null, 
+          "The contract should define an `Item Struct`"
         );
       });
 
       it("should have a `name`", () => {
         assert(
-            isDefined(subjectStruct)("name"),
-            "Struct Item should have a `name` member"
+          isDefined(subjectStruct)("name"), 
+          "Struct Item should have a `name` member"
         );
         assert(
-            isType(subjectStruct)("name")("string"),
-            "`name` should be of type `string`"
+          isType(subjectStruct)("name")("string"), 
+          "`name` should be of type `string`"
         );
       });
 
       it("should have a `sku`", () => {
         assert(
-            isDefined(subjectStruct)("sku"),
-            "Struct Item should have a `sku` member"
+          isDefined(subjectStruct)("sku"), 
+          "Struct Item should have a `sku` member"
         );
         assert(
-            isType(subjectStruct)("sku")("uint"),
-            "`sku` should be of type `uint`"
+          isType(subjectStruct)("sku")("uint"), 
+          "`sku` should be of type `uint`"
         );
       });
 
       it("should have a `price`", () => {
         assert(
-            isDefined(subjectStruct)("price"),
-            "Struct Item should have a `price` member"
+          isDefined(subjectStruct)("price"), 
+          "Struct Item should have a `price` member"
         );
         assert(
-            isType(subjectStruct)("price")("uint"),
-            "`price` should be of type `uint`"
+          isType(subjectStruct)("price")("uint"), 
+          "`price` should be of type `uint`"
         );
       });
 
       it("should have a `state`", () => {
         assert(
-            isDefined(subjectStruct)("state"),
-            "Struct Item should have a `state` member"
+          isDefined(subjectStruct)("state"), 
+          "Struct Item should have a `state` member"
         );
         assert(
-            isType(subjectStruct)("state")("State"),
-            "`state` should be of type `State`"
+          isType(subjectStruct)("state")("State"), 
+          "`state` should be of type `State`"
         );
       });
 
       it("should have a `seller`", () => {
         assert(
-            isDefined(subjectStruct)("seller"),
-            "Struct Item should have a `seller` member"
+          isDefined(subjectStruct)("seller"), 
+          "Struct Item should have a `seller` member"
         );
         assert(
-            isType(subjectStruct)("seller")("address"),
-            "`seller` should be of type `address`"
+          isType(subjectStruct)("seller")("address"), 
+          "`seller` should be of type `address`"
         );
         assert(
-            isPayable(subjectStruct)("seller"),
-            "`seller` should be payable"
+          isPayable(subjectStruct)("seller"), 
+          "`seller` should be payable"
         );
       });
 
       it("should have a `buyer`", () => {
         assert(
-            isDefined(subjectStruct)("buyer"),
-            "Struct Item should have a `buyer` member"
+          isDefined(subjectStruct)("buyer"), 
+          "Struct Item should have a `buyer` member"
         );
         assert(
-            isType(subjectStruct)("buyer")("address"),
-            "`buyer` should be of type `address`"
+          isType(subjectStruct)("buyer")("address"), 
+          "`buyer` should be of type `address`"
         );
         assert(
-            isPayable(subjectStruct)("buyer"),
-            "`buyer` should be payable"
+          isPayable(subjectStruct)("buyer"), 
+          "`buyer` should be payable"
         );
       });
     });
@@ -159,29 +159,29 @@ contract("SupplyChain", function (accounts) {
       const result = await instance.fetchItem.call(0);
 
       assert.equal(
-          result[0],
-          name,
-          "the name of the last added item does not match the expected value",
+        result[0],
+        name,
+        "the name of the last added item does not match the expected value",
       );
       assert.equal(
-          result[2].toString(10),
-          price,
-          "the price of the last added item does not match the expected value",
+        result[2].toString(10),
+        price,
+        "the price of the last added item does not match the expected value",
       );
       assert.equal(
-          result[3].toString(10),
-          SupplyChain.State.ForSale,
-          'the state of the item should be "For Sale"',
+        result[3].toString(10),
+        SupplyChain.State.ForSale,
+        'the state of the item should be "For Sale"',
       );
       assert.equal(
-          result[4],
-          alice,
-          "the address adding the item should be listed as the seller",
+        result[4],
+        alice,
+        "the address adding the item should be listed as the seller",
       );
       assert.equal(
-          result[5],
-          emptyAddress,
-          "the buyer address should be set to 0 when an item is added",
+        result[5],
+        emptyAddress,
+        "the buyer address should be set to 0 when an item is added",
       );
     });
 
@@ -194,9 +194,9 @@ contract("SupplyChain", function (accounts) {
       }
 
       assert.equal(
-          eventEmitted,
-          true,
-          "adding an item should emit a For Sale event",
+        eventEmitted,
+        true,
+        "adding an item should emit a For Sale event",
       );
     });
 
@@ -213,27 +213,27 @@ contract("SupplyChain", function (accounts) {
       const result = await instance.fetchItem.call(0);
 
       assert.equal(
-          result[3].toString(10),
-          SupplyChain.State.Sold,
-          'the state of the item should be "Sold"',
+        result[3].toString(10),
+        SupplyChain.State.Sold,
+        'the state of the item should be "Sold"',
       );
 
       assert.equal(
-          result[5],
-          bob,
-          "the buyer address should be set bob when he purchases an item",
+        result[5],
+        bob,
+        "the buyer address should be set bob when he purchases an item",
       );
 
       assert.equal(
-          new BN(aliceBalanceAfter).toString(),
-          new BN(aliceBalanceBefore).add(new BN(price)).toString(),
-          "alice's balance should be increased by the price of the item",
+        new BN(aliceBalanceAfter).toString(),
+        new BN(aliceBalanceBefore).add(new BN(price)).toString(),
+        "alice's balance should be increased by the price of the item",
       );
 
       assert.isBelow(
-          Number(bobBalanceAfter),
-          Number(new BN(bobBalanceBefore).sub(new BN(price))),
-          "bob's balance should be reduced by more than the price of the item (including gas costs)",
+        Number(bobBalanceAfter),
+        Number(new BN(bobBalanceBefore).sub(new BN(price))),
+        "bob's balance should be reduced by more than the price of the item (including gas costs)",
       );
     });
 
@@ -269,9 +269,9 @@ contract("SupplyChain", function (accounts) {
       const result = await instance.fetchItem.call(0);
 
       assert.equal(
-          result[3].toString(10),
-          SupplyChain.State.Shipped,
-          'the state of the item should be "Shipped"',
+        result[3].toString(10),
+        SupplyChain.State.Shipped,
+        'the state of the item should be "Shipped"',
       );
     });
 
@@ -287,9 +287,9 @@ contract("SupplyChain", function (accounts) {
       }
 
       assert.equal(
-          eventEmitted,
-          true,
-          "adding an item should emit a Shipped event",
+        eventEmitted,
+        true,
+        "adding an item should emit a Shipped event",
       );
     });
 
@@ -302,9 +302,9 @@ contract("SupplyChain", function (accounts) {
       const result = await instance.fetchItem.call(0);
 
       assert.equal(
-          result[3].toString(10),
-          SupplyChain.State.Received,
-          'the state of the item should be "Received"',
+        result[3].toString(10),
+        SupplyChain.State.Received,
+        'the state of the item should be "Received"',
       );
     });
 
@@ -329,9 +329,9 @@ contract("SupplyChain", function (accounts) {
       }
 
       assert.equal(
-          eventEmitted,
-          true,
-          "adding an item should emit a Shipped event",
+        eventEmitted,
+        true,
+        "adding an item should emit a Shipped event",
       );
     });
 
