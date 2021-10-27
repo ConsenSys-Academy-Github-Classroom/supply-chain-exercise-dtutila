@@ -147,7 +147,7 @@ contract SupplyChain {
   //    - check the value after the function is called to make 
   //      sure the buyer is refunded any excess ether sent. 
   // 6. call the event associated with this function!
-  function buyItem(uint sku) public forSale(sku) paidEnough(items[sku].price) checkValue(sku) payable returns (bool){
+  function buyItem(uint sku) public forSale(sku) paidEnough(items[sku].price) checkValue(sku) payable {
     //getting the item
     Item storage i = items[sku];
     i.buyer = payable(msg.sender);
@@ -156,19 +156,20 @@ contract SupplyChain {
     require(sent);
 
     emit LogSold(sku);
-    return sent;
+
   }
+
 
   // 1. Add modifiers to check:
   //    - the item is sold already 
   //    - the person calling this function is the seller. 
   // 2. Change the state of the item to shipped. 
   // 3. call the event associated with this function!
-  function shipItem(uint sku) public sold(sku) verifyCaller(items[sku].seller) returns(bool) {
+  function shipItem(uint sku) public sold(sku) verifyCaller(items[sku].seller)  {
     Item storage i = items[sku];
     i.state = State.Shipped;
     emit LogShipped(sku);
-    return true;
+
   }
 
   // 1. Add modifiers to check 
@@ -176,11 +177,10 @@ contract SupplyChain {
   //    - the person calling this function is the buyer. 
   // 2. Change the state of the item to received. 
   // 3. Call the event associated with this function!
-  function receiveItem(uint sku) public shipped(sku) verifyCaller(items[sku].buyer) returns(bool){
+  function receiveItem(uint sku) public shipped(sku) verifyCaller(items[sku].buyer) {
     Item storage i = items[sku];
     i.state = State.Received;
     emit LogReceived(sku);
-    return true;
 
   }
 
